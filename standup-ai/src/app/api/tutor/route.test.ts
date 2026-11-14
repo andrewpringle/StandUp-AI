@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { GEN_MODEL } from '../../../pipeline/generate';
+import { CHAT_MAX_TOKENS, EFFORT, GEN_MODEL } from '../../../pipeline/generate';
 const create = vi.hoisted(() => vi.fn());
 vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { create }; } }));
 import { POST } from './route';
@@ -30,7 +30,7 @@ describe('MVP live tutor boundary', () => {
     const response = await POST(request(valid));
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ reply: 'Start by subtracting 30 from both sides.' });
-    expect(create).toHaveBeenCalledWith(expect.objectContaining({ model: GEN_MODEL, max_tokens: 450 }));
+    expect(create).toHaveBeenCalledWith(expect.objectContaining({ model: GEN_MODEL, max_tokens: CHAT_MAX_TOKENS, output_config: EFFORT }));
   });
   it('returns a safe failure when the model is unavailable', async () => {
     vi.stubEnv('STANDUP_DEMO_LIVE_AI', 'true'); vi.stubEnv('ANTHROPIC_API_KEY', 'unit-test-only');

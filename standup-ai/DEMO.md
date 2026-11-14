@@ -55,9 +55,11 @@ choose a replacement model or call the question-generation pipeline.
 To test locally, set `ANTHROPIC_API_KEY` and `STANDUP_DEMO_LIVE_AI=true` in
 `.env.local`, restart the app, then open
 `http://localhost:3000/student-demo/index.html?tutor=live#tutor`.
-Only this opt-in mode sends a question to the server. Replies are capped at 450
-tokens, with a 15-second provider timeout, no automatic retries, and a small
-in-memory request limit. An unavailable model falls back visibly to demo guidance.
+Only this opt-in mode sends a question to the server. Replies are capped at 1,500
+tokens (Haiku's thinking counts against the cap, so there is headroom at low effort),
+with a 30-second provider timeout, one retry, a small in-memory request limit, and the
+app-wide dollar cap (`MAX_USD`, default 1.00) shared with the live backend. An
+unavailable model falls back visibly to demo guidance.
 The configured model must be available to the supplied Anthropic account.
 No real provider call was made during development.
 

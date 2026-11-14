@@ -1,5 +1,5 @@
-import Anthropic from '@anthropic-ai/sdk';
-import { GEN_MODEL } from '../../../pipeline/generate';
+import { CHAT_MAX_TOKENS, EFFORT, GEN_MODEL } from '../../../pipeline/generate';
+import { getClaude } from '../../../server/claude'; // shared metered client: one spend cap for the whole app
 
 type QuestionContext = { equation: string; hint: string; steps: string[] };
 const preferences = ['steps', 'visual', 'practice'];
@@ -52,10 +52,12 @@ export async function POST(request: Request) {
   entry.count++;
   recent.set(client, entry);
   try {
-    const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, maxRetries: 0, timeout: 15_000 });
-    const result = await anthropic.messages.create({
+    // Haiku thinks before answering and thinking tokens count against max_tokens, so allow headroom at low effort;
+    // the system prompt below keeps replies concise.
+    const result = await getClaude().messages.create({
       model: GEN_MODEL,
-      max_tokens: 450,
+      max_tokens: CHAT_MAX_TOKENS,
+      output_config: EFFORT,
       system: `You are StandUp AI, a patient SAT/ACT study tutor for a school demo.
 Use positive reinforcement without inventing score gains or promising outcomes.
 The student completed a simulated beginning test. Their preference is ${input.preference}.

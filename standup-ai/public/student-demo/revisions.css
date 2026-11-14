@@ -50,3 +50,16 @@
 @media(max-width:720px){.quick-chat-anchor{left:15px;right:15px}.quick-chat-anchor .quick-chat{width:min(370px,100%)}}
 @media(max-width:1100px){.daily-target{flex-wrap:wrap;gap:12px 15px;padding:18px}.daily-target-progress{width:100%;margin-left:55px;min-width:0}.daily-target.compact .daily-target-progress{margin-left:45px}.daily-target-copy{flex:1}.daily-target-note{font-size:9px}}
 @media(max-width:720px){.daily-target{margin-bottom:19px;padding:17px}.daily-target-copy p{font-size:10px}.daily-target-copy h2{font-size:14px}.daily-target-icon{height:34px;width:34px}.daily-target-progress{margin-left:0}.daily-target.compact{padding:13px 15px}.daily-target.compact .daily-target-progress{margin-left:0}.daily-target.compact .daily-target-note{display:none}.daily-target-label{font-size:10px}.daily-target-label strong{font-size:12px}.passage{font-size:16px;padding:19px;line-height:1.9}.passage-note{font-size:9px}.quick-chat-anchor{right:15px;bottom:15px;gap:9px}.quick-chat-launcher{font-size:11px;padding:12px 15px}.quick-chat{width:min(370px,calc(100vw - 30px));max-height:calc(100dvh - 102px)}.quick-chat-transcript{max-height:40dvh}.quick-chat-header{padding:14px}.quick-chat .chat-compose textarea{min-height:41px}.footer{padding-bottom:55px}}
+/* Live mode (?live=1): see live.js */
+.live-skills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px}
+.live-skill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid var(--line);border-radius:7px;background:white;font-size:12px;color:var(--ink)}
+.live-skill strong{font-size:11px;background:var(--pale);color:var(--green);border-radius:9px;padding:1px 7px}
+.live-skill[aria-pressed="true"]{background:#dfe8d4;border-color:#78946d;font-weight:600}
+.live-badges{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.live-item{margin-bottom:14px}
+.live-choices{margin:8px 0 14px;padding-left:24px;font-size:13px;line-height:1.9}
+.live-flag{margin-top:18px}
+.live-chat{margin-top:18px}
+.live-chat .chat-transcript{margin:14px 0}
+.live-reviewed summary{cursor:pointer;margin:16px 0 10px;font-size:12px;color:var(--muted)}
+#live-result:focus{outline:0}
