@@ -4,6 +4,7 @@ import { getProgress } from "@/server";
 import type { Progress } from "@/server/contracts";
 import { leaderboard } from "@/mock/data";
 import MasteryBadge from "@/components/MasteryBadge";
+import OfficialPractice from "@/components/OfficialPractice";
 import Skeleton from "@/components/Skeletons";
 import { errorText } from "@/components/errors";
 import { AbilityChart, ScoreChart } from "@/components/Charts";
@@ -68,6 +69,7 @@ export default function Dashboard() {
       <Suspense fallback={<Skeleton rows={5} />}>
         <Live />
       </Suspense>
+      <OfficialPractice showPracticeLink />
       <section aria-labelledby="sample" className="space-y-4">
         <div className="flex items-center gap-2">
           <h2 id="sample" className="text-xl font-semibold">Coming soon</h2>

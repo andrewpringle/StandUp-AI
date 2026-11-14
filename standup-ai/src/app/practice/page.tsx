@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { nextQuestion } from "@/server";
 import type { NextQuestionResult } from "@/server/contracts";
 import Practice from "@/components/Practice";
+import OfficialPractice from "@/components/OfficialPractice";
 import Skeleton from "@/components/Skeletons";
 import { errorText } from "@/components/errors";
 
@@ -22,6 +23,7 @@ export default function PracticePage() {
       <Suspense fallback={<Skeleton rows={5} />}>
         <Quiz />
       </Suspense>
+      <OfficialPractice />
     </div>
   );
 }
