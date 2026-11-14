@@ -1,5 +1,9 @@
 # Student MVP demo
 
+Private hosted presentation:
+[Open StandUp AI](https://standup-ai-student-demo-ap.southcarolina.chatgpt.site).
+This version uses simulated data and prewritten tutor guidance.
+
 Run `npm ci` and `npm run dev` in `standup-ai`, then open `http://localhost:3000`.
 No database or API key is needed for the presentation. The home and student
 dashboard routes open `/student-demo/index.html`. The teacher prototype is retained.
@@ -67,6 +71,9 @@ uses demo guidance and has no API endpoint.
 The existing retention integration test requires the project's PostgreSQL setup.
 Browser checks cover lesson answers (including fractions), hints, completion,
 preferences, point rewards, feedback, chat, and a narrow mobile viewport.
+Validated for this change: production build and TypeScript passed; 23 automated
+tests passed; desktop and 390-pixel mobile checks passed. The live provider call
+was mocked in tests and was not exercised against an Anthropic account.
 
 The interface uses visible labeled navigation, a clear current section, and one
 primary action per lesson. Design reference:

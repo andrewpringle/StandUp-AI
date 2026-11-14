@@ -30,4 +30,3 @@ Math answers are checked by sympy, English by an independent blind model answer.
 
 The home page now opens the student MVP. No database or model calls are required.
 See [DEMO.md](DEMO.md) for the walkthrough, official question sources, and optional live tutoring.
-
