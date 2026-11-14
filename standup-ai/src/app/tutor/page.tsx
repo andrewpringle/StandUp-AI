@@ -1,10 +1,5 @@
-import Chat from "@/components/Chat";
+import { redirect } from 'next/navigation';
 
-export default function TutorPage() {
-  return (
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold">Tutor</h1>
-      <Chat />
-    </div>
-  );
+export default function StudentDemo() {
+  redirect('/student-demo/index.html#tutor');
 }
