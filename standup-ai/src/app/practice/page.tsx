@@ -1,10 +1,5 @@
-import Practice from "@/components/Practice";
+import { redirect } from 'next/navigation';
 
-export default function PracticePage() {
-  return (
-    <div className="space-y-4">
-      <h1 className="text-3xl font-bold">Practice</h1>
-      <Practice />
-    </div>
-  );
+export default function StudentDemo() {
+  redirect('/student-demo/index.html#practice');
 }
