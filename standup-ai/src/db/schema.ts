@@ -76,6 +76,7 @@ export const sessions = pgTable("sessions", {
   id: id(),
   studentId: uuid("student_id").notNull().references(() => users.id),
   mode: sessionModeEnum("mode").notNull(),
+  questionId: uuid("question_id").references(() => questions.id), // tutor walkthroughs: the one question the session is about
   startedAt: timestamp("started_at").notNull().defaultNow(),
   endedAt: timestamp("ended_at"),
 });

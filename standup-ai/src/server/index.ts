@@ -19,15 +19,18 @@ const uuid = (v: unknown, what: string): string => {
 };
 
 // A student may only use their own sessions; anything else looks like "not found".
-async function ownSession(id: string, studentId: string, mode?: "practice" | "deepdive") {
+// A tutor session is bound to one question: passing `questionId` also requires the session to be about that question.
+async function ownSession(id: string, studentId: string, mode?: "practice" | "deepdive", questionId?: string) {
   const [s] = await db.select({ id: sessions.id }).from(sessions).where(and(
-    eq(sessions.id, id), eq(sessions.studentId, studentId), mode ? eq(sessions.mode, mode) : undefined,
+    eq(sessions.id, id), eq(sessions.studentId, studentId),
+    mode ? eq(sessions.mode, mode) : undefined,
+    questionId ? eq(sessions.questionId, questionId) : undefined,
   ));
   if (!s) throw new AppError("NOT_FOUND", "Session not found.");
 }
 
-async function newSession(studentId: string, mode: "practice" | "deepdive") {
-  const [s] = await db.insert(sessions).values({ studentId, mode }).returning({ id: sessions.id });
+async function newSession(studentId: string, mode: "practice" | "deepdive", questionId?: string) {
+  const [s] = await db.insert(sessions).values({ studentId, mode, questionId }).returning({ id: sessions.id });
   return s.id;
 }
 
@@ -155,8 +158,8 @@ export async function tutorMessage(i: { sessionId?: string; questionId: string; 
   const studentId = await demoStudentId();
   const { q, last } = await reviewTarget(studentId, questionId);
   let sid: string;
-  if (i.sessionId === undefined) sid = await newSession(studentId, "deepdive");
-  else { sid = uuid(i.sessionId, "session"); await ownSession(sid, studentId, "deepdive"); }
+  if (i.sessionId === undefined) sid = await newSession(studentId, "deepdive", questionId);
+  else { sid = uuid(i.sessionId, "session"); await ownSession(sid, studentId, "deepdive", questionId); }
 
   // Built here, never taken from the client. The model gets the key to steer with; deepDiveTurn tells it not to state it.
   const questionContext = [
@@ -173,7 +176,7 @@ export async function finishTutor(i: { sessionId: string; questionId: string }):
   const sessionId = uuid(i.sessionId, "session");
   const questionId = uuid(i.questionId, "question");
   const studentId = await demoStudentId();
-  await ownSession(sessionId, studentId, "deepdive");
+  await ownSession(sessionId, studentId, "deepdive", questionId);
   const [{ n }] = await db.select({ n: sql<number>`count(*)::int` }).from(messages).where(eq(messages.sessionId, sessionId));
   if (!n) throw bad("Nothing to summarize yet. Chat with the tutor first.");
   const { q } = await reviewTarget(studentId, questionId);

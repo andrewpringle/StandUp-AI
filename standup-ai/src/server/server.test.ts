@@ -261,8 +261,26 @@ describe("tutor", () => {
     await finishTutor({ sessionId: s2, questionId: f });
     expect((await getReviewItems()).find((i) => i.questionId === f)).toMatchObject({ flagged: true, done: true });
 
-    const [empty] = await db.insert(sessions).values({ studentId, mode: "deepdive" }).returning({ id: sessions.id });
+    const [empty] = await db.insert(sessions).values({ studentId, mode: "deepdive", questionId: q }).returning({ id: sessions.id });
     await expect(finishTutor({ sessionId: empty.id, questionId: q })).rejects.toMatchObject({ code: "BAD_INPUT" });
+  });
+
+  it("a tutor session is bound to one question: it can't be reused for, or finished against, another", async () => {
+    const a = await wrongQ(), b = await wrongQ();
+    const c = claude("What did you try?");
+    setClaudeForTests(c);
+    const { sessionId } = await tutorMessage({ questionId: a, message: "stuck" });
+    const [s] = await db.select().from(sessions).where(eq(sessions.id, sessionId));
+    expect(s.questionId).toBe(a);
+
+    await expect(tutorMessage({ sessionId, questionId: b, message: "now this one" })).rejects.toMatchObject({ code: "NOT_FOUND" });
+    await expect(finishTutor({ sessionId, questionId: b })).rejects.toMatchObject({ code: "NOT_FOUND" });
+    expect(c.messages.create).toHaveBeenCalledTimes(1); // the mismatched calls never reached the model
+    expect((await getReviewItems()).find((i) => i.questionId === b)).toMatchObject({ done: false }); // b was not marked done
+    expect((await tutorMessage({ sessionId, questionId: a, message: "back on a" })).sessionId).toBe(sessionId); // the right pairing still works
+
+    const [legacy] = await db.insert(sessions).values({ studentId, mode: "deepdive" }).returning({ id: sessions.id }); // no question
+    await expect(tutorMessage({ sessionId: legacy.id, questionId: a, message: "hi" })).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
   it("model failures become a safe MODEL error", async () => {
