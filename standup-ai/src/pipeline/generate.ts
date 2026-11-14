@@ -1,5 +1,14 @@
-export const GEN_MODEL = "claude-sonnet-5-5";
-export const CHECK_MODEL = "claude-haiku-5-5";
+// MVP: everything runs on Haiku 5.5 ($0.10 / $0.50 per MTok). Swap here to change every agent and the pipeline.
+export const MODEL = "claude-haiku-5-5";
+export const GEN_MODEL = MODEL;
+export const CHECK_MODEL = MODEL;
+
+// Haiku thinks by default and thinking tokens count against max_tokens, so leave headroom.
+// effort "low" keeps thinking (and cost) small; Haiku 5.5 rejects non-default sampling params, so send none.
+export const GEN_MAX_TOKENS = 4000;
+export const CHECK_MAX_TOKENS = 300;
+export const CHAT_MAX_TOKENS = 1500;
+export const EFFORT = { effort: "low" } as const;
 
 // Minimal slice of the Anthropic client so tests can mock it.
 export interface Claude {
@@ -8,8 +17,12 @@ export interface Claude {
       model: string;
       max_tokens: number;
       system?: string;
-      messages: { role: "user"; content: string }[];
-    }): Promise<{ content: { type: string; text?: string }[] }>;
+      output_config?: { effort: "low" | "medium" | "high" };
+      messages: { role: "user" | "assistant"; content: string }[];
+    }): Promise<{
+      content: { type: string; text?: string }[];
+      usage?: { input_tokens: number; output_tokens: number };
+    }>;
   };
 }
 
@@ -71,7 +84,8 @@ export async function generate(claude: Claude, skill: SkillRow, difficulty: numb
     : "";
   const r = await claude.messages.create({
     model: GEN_MODEL,
-    max_tokens: 1000,
+    max_tokens: GEN_MAX_TOKENS,
+    output_config: EFFORT,
     system: SYSTEM,
     messages: [{ role: "user", content: `Subject: ${skill.subject}\nTopic: ${skill.topic}\nSkill: ${skill.name}\nTarget difficulty_est: ${difficulty}${repeats}` }],
   });

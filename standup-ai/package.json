@@ -11,7 +11,9 @@
     "db:up": "docker start standup-db 2>/dev/null || docker run -d --name standup-db -e POSTGRES_USER=standup -e POSTGRES_PASSWORD=standup -e POSTGRES_DB=standup -p 127.0.0.1:5432:5432 postgres:16",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",
+    "db:seed-demo": "tsx src/db/seed-demo.ts",
     "db:retention": "tsx src/db/retention.ts",
+    "agent:demo": "tsx --env-file-if-exists=.env.local src/agents/cli.ts",
     "gen:questions": "tsx --env-file-if-exists=.env.local src/pipeline/run.ts"
   },
   "dependencies": {

@@ -1,4 +1,4 @@
-import type { MasteryState } from "@/mock/data";
+import type { MasteryState } from "@/server/contracts";
 
 const styles: Record<MasteryState, string> = {
   unseen: "bg-surface-200 text-surface-900",

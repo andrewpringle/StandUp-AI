@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import { join } from "node:path";
-import { CHECK_MODEL, text, type Claude, type Question } from "./generate";
+import { CHECK_MAX_TOKENS, CHECK_MODEL, EFFORT, text, type Claude, type Question } from "./generate";
 
 // Absolute paths so the CLI works from any folder. shortcut: POSIX venv layout, Windows uses Scripts/python.exe.
 const ROOT = join(import.meta.dirname, "../..");
@@ -27,7 +27,8 @@ export async function verifyEnglish(claude: Claude, q: Question): Promise<Verdic
   const { A, B, C, D } = q.choices;
   const r = await claude.messages.create({
     model: CHECK_MODEL,
-    max_tokens: 5,
+    max_tokens: CHECK_MAX_TOKENS,
+    output_config: EFFORT,
     messages: [{ role: "user", content: `${q.stem}\nA) ${A}\nB) ${B}\nC) ${C}\nD) ${D}\nReply with only the letter of the single best answer.` }],
   });
   const pick = text(r).trim().charAt(0).toUpperCase();

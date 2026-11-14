@@ -113,6 +113,16 @@ export const skillMastery = pgTable("skill_mastery", {
   attemptCount: integer("attempt_count").notNull().default(0),
 }, (t) => [primaryKey({ columns: [t.studentId, t.skillId] })]);
 
+// Per-student state for tutor review: `flagged` = saved to revisit (even if answered right); `doneAt` = finished a
+// tutor walkthrough. Wrong answers are derived from attempts, so a row exists only once flagged or walked through.
+export const questionReviews = pgTable("question_reviews", {
+  studentId: uuid("student_id").notNull().references(() => users.id),
+  questionId: uuid("question_id").notNull().references(() => questions.id),
+  flagged: boolean("flagged").notNull().default(false),
+  flaggedAt: timestamp("flagged_at"),
+  doneAt: timestamp("done_at"),
+}, (t) => [primaryKey({ columns: [t.studentId, t.questionId] })]);
+
 export const abilityHistory = pgTable("ability_history", {
   id: id(),
   studentId: uuid("student_id").notNull().references(() => users.id),

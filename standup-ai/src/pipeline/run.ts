@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import { db, pool } from "../db";
 import { questions, skills } from "../db/schema";
 import { generate, type Claude, type SkillRow } from "./generate";
+import { metered, SpendCapError } from "./metered";
 import { verify } from "./verify";
 
 type Row = typeof questions.$inferInsert;
@@ -28,7 +29,7 @@ export async function makeRow(
     q = await generate(claude, skill, difficulty, avoid);
   } catch (e) {
     const status = (e as { status?: number }).status;
-    if (status === 401 || status === 403) throw e;
+    if (status === 401 || status === 403 || e instanceof SpendCapError) throw e;
     console.error("generation failed:", e instanceof Error ? e.message : e);
     return null; // nothing to store
   }
@@ -59,18 +60,25 @@ async function main() {
   const [skill] = await db.select().from(skills).where(eq(skills.id, skillId));
   if (!skill) throw new Error(`no skill ${skillId}`);
   if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY is not set (put it in .env.local)");
-  const claude = new Anthropic() as unknown as Claude;
+  const maxUsd = Number(parseArg(process.argv, "max-usd") ?? 0.5); // hard stop; default 50 cents
+  const claude = metered(new Anthropic() as unknown as Claude, maxUsd);
   let ok = 0, draft = 0, failed = 0;
   const stems: string[] = [];
-  for (let i = 0; i < n; i++) {
-    const row = await makeRow(claude, skill.id, skill, difficultyAt(i, n), stems);
-    if (!row) { failed++; continue; }
-    await db.insert(questions).values(row);
-    stems.push(row.stem);
-    if (row.status === "verified") ok++; else draft++;
+  try {
+    for (let i = 0; i < n; i++) {
+      const row = await makeRow(claude, skill.id, skill, difficultyAt(i, n), stems);
+      if (!row) { failed++; continue; }
+      await db.insert(questions).values(row);
+      stems.push(row.stem);
+      if (row.status === "verified") ok++; else draft++;
+    }
+  } catch (e) {
+    if (!(e instanceof SpendCapError)) throw e;
+    console.error(e.message); // stop cleanly; rows already inserted are kept
+  } finally {
+    console.log({ verified: ok, draft, generationFailed: failed, spent: claude.stats() });
+    await pool.end();
   }
-  console.log({ verified: ok, draft, generationFailed: failed });
-  await pool.end();
 }
 
 if (process.argv[1]?.endsWith("run.ts")) main().catch((e) => { console.error(e); process.exit(1); });
