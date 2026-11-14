@@ -25,3 +25,8 @@ Math answers are checked by sympy, English by an independent blind model answer.
 - `npm test` runs engine, pipeline and retention tests (retention needs the DB running).
 - `npm run db:retention` hard-deletes chat messages older than 45 days. Run it daily.
 - `scripts/verify/.venv/bin/python scripts/verify/test_verify.py` runs the verifier tests.
+
+## Student competition demo
+
+The home page now opens the student MVP. No database or model calls are required.
+See [DEMO.md](DEMO.md) for the walkthrough, official question sources, and optional live tutoring.
