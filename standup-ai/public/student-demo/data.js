@@ -3,7 +3,8 @@
 export const sources = {
   sat9: { name:'SAT Practice Test 9', publisher:'College Board', url:'https://satsuite.collegeboard.org/media/pdf/sat-practice-test-9-digital.pdf', page:34 },
   sat10: { name:'SAT Practice Test 10', publisher:'College Board', url:'https://satsuite.collegeboard.org/media/pdf/sat-practice-test-10-digital.pdf', page:39 },
-  act: { name:'ACT 2024–2025 · Form 2176CPRE', publisher:'ACT', url:'https://www.act.org/content/dam/act/unsecured/documents/Preparing-for-the-ACT-24-25.pdf', page:28 }
+  act: { name:'ACT 2024–2025 · Form 2176CPRE', publisher:'ACT', url:'https://www.act.org/content/dam/act/unsecured/documents/Preparing-for-the-ACT-24-25.pdf', page:28 },
+  act2025: { name:'ACT 2025–2026 · Form 25MC1', publisher:'ACT', url:'https://www.act.org/content/dam/act/unsecured/documents/Preparing-for-the-ACT-e.pdf', page:15 }
 };
 export const questions = {
   equivalent: {
@@ -30,6 +31,24 @@ export const questions = {
     steps:['Distribute: −12x + 15 = 2 − 10x.', 'Add 12x to both sides: 15 = 2 + 2x.', 'Subtract 2, then divide by 2: 13 = 2x, so x = 6.5 (or 13/2).'],
     takeaway:'Distribute to every term inside the parentheses, including its sign.'
   },
+  sentenceVerb: {
+    id:'act2176-e-q6', source:'act', page:15, location:'English · Question 6 · Sentence excerpt; instructions adapted',
+    prompt:'Which replacement makes this a complete sentence?',
+    passage:{before:'Today, twenty-nine white lines ',focus:'making',after:' more than half a billion encodings possible.'},
+    choices:['NO CHANGE','which make','to make','make'], labels:['F','G','H','J'], answer:3,
+    hint:'Find the subject, then check whether it has a main verb that can stand on its own.',
+    steps:['The subject is the plural noun phrase about the lines.', 'An -ing form alone does not give this sentence a main verb. The other two longer options also leave it incomplete.', 'Choose J. A simple present-tense verb agrees with the plural subject and completes the thought.'],
+    takeaway:'A complete sentence needs a subject and a main verb. An -ing word by itself is not enough.'
+  },
+  verbAgreement: {
+    id:'act25mc1-e-q9', source:'act2025', page:15, location:'English · Question 9 · Short passage excerpt; instructions adapted',
+    prompt:'Which verb agrees with the subject?',
+    passage:{before:'Partnering with Instituto Atá ',focus:'have enabled',after:' these women …'},
+    choices:['No Change','has enabled','are enabling','enable'], answer:1,
+    hint:'The subject is the activity of partnering. Does that describe one activity or several people?',
+    steps:['The -ing phrase naming the activity is the subject of the sentence.', 'That activity is singular. Nearby plural words do not change the subject.', 'Choose B. Use a singular verb phrase to agree with the activity.'],
+    takeaway:'Match the verb to the actual subject. An activity expressed by a gerund phrase takes a singular verb.'
+  },
   combine: {
     id:'act2176-m-q2', source:'act', page:26, location:'Mathematics · Question 2',
     prompt:'Which of the following expressions is equivalent to −4x³ − 12x³ + 9x²?', equation:'−4x³ − 12x³ + 9x²',
@@ -40,8 +59,9 @@ export const questions = {
   }
 };
 export const lessons = [
-  { id:'linear', title:'Make equations work for you', topic:'Linear equations', test:'SAT + ACT', minutes:12, description:'Keep both sides balanced, spot shortcuts, and build confidence with one variable.', questions:['equivalent','scale','distribute'] },
-  { id:'expressions', title:'Bring like terms together', topic:'Equivalent expressions', test:'ACT', minutes:5, description:'Know what combines, keep track of signs, and simplify with a clear strategy.', questions:['combine'] }
+  { id:'linear', title:'Make equations work for you', topic:'Linear equations', subject:'Math', test:'SAT + ACT', minutes:12, description:'Keep both sides balanced, spot shortcuts, and build confidence with one variable.', questions:['equivalent','scale','distribute'] },
+  { id:'english', title:'Give every sentence a strong verb', topic:'Complete sentences & agreement', subject:'English', test:'ACT', minutes:5, description:'Find the subject, choose a main verb, and turn a fragment into a complete thought.', questions:['sentenceVerb','verbAgreement'] },
+  { id:'expressions', title:'Bring like terms together', topic:'Equivalent expressions', subject:'Math', test:'ACT', minutes:5, description:'Know what combines, keep track of signs, and simplify with a clear strategy.', questions:['combine'] }
 ];
 export const baselineSkills = [
   {name:'Linear equations',before:42,now:58},
@@ -54,11 +74,4 @@ export const localSchools = [
   {name:'Riverside High',short:'RH',points:17680,students:136,you:true},
   {name:'Oakwood Academy',short:'OA',points:16420,students:142},
   {name:'Northview High',short:'NH',points:15360,students:128}
-];
-export const nationalSchools = [
-  {name:'Lincoln Prep',short:'LP',points:48300,students:350},
-  {name:'Central High',short:'CH',points:46200,students:330},
-  {name:'Westfield High',short:'WH',points:18240,students:152},
-  {name:'Riverside High',short:'RH',points:17680,students:136,you:true},
-  {name:'Oakwood Academy',short:'OA',points:16420,students:142}
 ];

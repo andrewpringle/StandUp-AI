@@ -1,7 +1,7 @@
 # Student MVP demo
 
 Private hosted presentation:
-[Open StandUp AI](https://standup-ai-student-demo-ap.southcarolina.chatgpt.site).
+[Open StandUp AI](https://standup-ai-student-demo-ap.sites.sc.edu).
 This version uses simulated data and prewritten tutor guidance.
 
 Run `npm ci` and `npm run dev` in `standup-ai`, then open `http://localhost:3000`.
@@ -18,25 +18,29 @@ actual diagnostic administration or student authentication.
 2. Change the learning approach to see how guidance adapts.
 3. Start the linear-equations lesson, use a hint, and answer three released questions.
 4. See the lesson summary, activity, and points update.
-5. Visit Points & schools; switch regions and redeem an avatar color.
-6. Ask StandUp about your current question, then return to the lesson.
+5. Try the English lesson, then view your contribution to the local school league.
+6. Open the corner StandUp chat from the overview; ask a question without leaving the page.
 7. Submit feedback and reload to confirm it stays in this browser.
 
 Scores, historical study time, school names, and rankings are illustrative.
 Real demo activity is tracked separately. Short lessons do not change the sample
-SAT score. Points can be earned once per question and lesson. Redeeming points
-does not reduce lifetime school contributions. Active lesson time is counted only
-while the lesson tab is visible. Preferences, the active lesson, points, feedback,
+SAT score. Points can be earned once per question and lesson and contribute to
+local school standings. There are no nationwide rankings or point redemptions.
+The daily target is 15 minutes, measured from active lessons and tutor conversations.
+Time pauses while the tab is hidden or after 90 seconds without interaction.
+Daily progress resets at local midnight, while historical time is retained.
+Preferences, the active lesson, points, feedback,
 and chat history are stored locally. Clear site data to reset the presentation.
 
 ## Released questions and costs
 
-All four practice questions are preloaded; explanations are authored for the demo.
+All six practice questions are preloaded; explanations are authored for the demo.
 No test questions are generated, and no API calls run in default presentation mode.
 
 - [College Board SAT Practice Test 9](https://satsuite.collegeboard.org/media/pdf/sat-practice-test-9-digital.pdf): Math module 1, question 2, PDF page 34.
 - [College Board SAT Practice Test 10](https://satsuite.collegeboard.org/media/pdf/sat-practice-test-10-digital.pdf): Math module 1, question 10, PDF page 39.
 - [ACT 2024–2025, form 2176CPRE](https://www.act.org/content/dam/act/unsecured/documents/Preparing-for-the-ACT-24-25.pdf): math questions 2 and 16, PDF pages 26 and 28. Question 16 uses numeric entry in this demo; its original mathematical content is preserved.
+- The English lesson uses short excerpts from ACT 2024–2025 English question 6 (PDF page 15) and [ACT 2025–2026, form 25MC1](https://www.act.org/content/dam/act/unsecured/documents/Preparing-for-the-ACT-e.pdf), English question 9 (PDF page 15). Original choices are retained; directions are adapted for the excerpts.
 
 The full tests open at the publisher's site. They are not copied into the project.
 The archived ACT uses a legacy format. This MVP does not score the full PDFs.
@@ -66,12 +70,12 @@ uses demo guidance and has no API endpoint.
 
 - `npm run build`
 - `npx tsc --noEmit`
-- `npx vitest run src/engine/engine.test.ts src/pipeline/pipeline.test.ts src/app/api/tutor/route.test.ts`
+- `npx vitest run src/engine/engine.test.ts src/pipeline/pipeline.test.ts src/app/api/tutor/route.test.ts src/demo/study.test.js`
 
 The existing retention integration test requires the project's PostgreSQL setup.
 Browser checks cover lesson answers (including fractions), hints, completion,
-preferences, point rewards, feedback, chat, and a narrow mobile viewport.
-Validated for this change: production build and TypeScript passed; 23 automated
+preferences, local points, feedback, corner chat, and a narrow mobile viewport.
+Validated for this change: production build and TypeScript passed; 29 automated
 tests passed; desktop and 390-pixel mobile checks passed. The live provider call
 was mocked in tests and was not exercised against an Anthropic account.
 
