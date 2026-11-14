@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@import "@skeletonlabs/skeleton";
+@import "@skeletonlabs/skeleton-react";
+@import "@skeletonlabs/skeleton/themes/cerberus";
+
+body {
+  background: var(--color-surface-50);
+  color: var(--color-surface-950);
+}

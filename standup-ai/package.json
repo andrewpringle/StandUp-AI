@@ -1,0 +1,42 @@
+{
+  "name": "standup-ai",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "vitest run",
+    "db:up": "docker start standup-db 2>/dev/null || docker run -d --name standup-db -e POSTGRES_USER=standup -e POSTGRES_PASSWORD=standup -e POSTGRES_DB=standup -p 127.0.0.1:5432:5432 postgres:16",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:retention": "tsx src/db/retention.ts",
+    "gen:questions": "tsx --env-file-if-exists=.env.local src/pipeline/run.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0",
+    "drizzle-orm": "^0.45.4",
+    "next": "16.4.6",
+    "pg": "^8.23.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "^3.10.1"
+  },
+  "devDependencies": {
+    "@skeletonlabs/skeleton": "^5.0.4",
+    "@skeletonlabs/skeleton-react": "^5.0.4",
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "^24.19.2",
+    "@types/pg": "^8.23.1",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.6",
+    "tailwindcss": "4.3.3",
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "vitest": "^5.1.0"
+  }
+}

@@ -1,0 +1,6 @@
+# The app lives in standup-ai/ (own .gitignore). These guard anything created at the repo root.
+.env*
+!.env.example
+node_modules/
+.impeccable/
+.DS_Store
